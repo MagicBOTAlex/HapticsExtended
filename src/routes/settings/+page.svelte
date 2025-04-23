@@ -12,12 +12,12 @@
         {#each HapticSettings.routes as route}
         <InstanceRoute bind:route={route}/>
         {/each}
-        {#each HapticSettings.routes as route}
+        <!-- {#each HapticSettings.routes as route}
         <InstanceRoute bind:route={route}/>
         {/each}
         {#each HapticSettings.routes as route}
         <InstanceRoute bind:route={route}/>
-        {/each}
+        {/each} -->
 
     </div>
 </div>
