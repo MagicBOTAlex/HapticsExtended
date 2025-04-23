@@ -1,0 +1,26 @@
+{
+    "comment1": "Why tf does json not support comments",
+    "comment2": "TODO: Add merging multiple support",
+    "routes": [
+        {
+            "src": "/pat_left",
+            "dest": "http://192.168.50.44:82/LeftEar",
+            "mapping": {
+                "from": {
+                    "upper": 0.8,
+                    "lower": 0.1
+                }
+            }
+        },
+        {
+            "src": "/pat_right",
+            "dest": "http://192.168.50.44:82/RighttEar",
+            "mapping": {
+                "from": {
+                    "upper": 0.8,
+                    "lower": 0.1
+                }
+            }
+        }
+    ]
+}

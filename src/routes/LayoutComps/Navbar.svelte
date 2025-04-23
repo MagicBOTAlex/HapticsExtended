@@ -1,6 +1,6 @@
 <script lang="ts">
     import GithubMark from "@images/brands/GithubMark.svelte";
-    import DeprivedDevsLogo from "@images/brands/DeprivedLogo.svg";
+    import DeprivedDevsLogo from "@images/brands/DeprivedLogo.svg?raw";
 
     import { afterNavigate } from '$app/navigation';
     import { onMount } from "svelte";
@@ -21,7 +21,11 @@
     <div class="flex flex-col w-full">
         <div class="flex items-center p-2 shadow-lg">
             <div class="w-10 h-10 mr-3">
-                <img class="object-contain" src="{DeprivedDevsLogo}" alt="">
+                <div
+                    class="w-full h-full object-contain fill-base-content"
+                    aria-label="Deprived Devs logo"
+                    role="img"
+                    >{@html DeprivedDevsLogo}</div>
             </div>
             <a class="p-0 text-xl">
                 <div class="font-bold">

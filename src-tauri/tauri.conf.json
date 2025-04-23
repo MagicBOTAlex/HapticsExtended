@@ -12,8 +12,10 @@
   "app": {
     "windows": [
       {
-        "title": "hapticsextended",
-        "width": 800,
+        "title": "Haptics Extended",
+        "minWidth": 350,
+        "width": 350,
+        "minHeight": 400,
         "height": 600
       }
     ],
