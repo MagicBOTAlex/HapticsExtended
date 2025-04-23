@@ -13,7 +13,7 @@
     });
 </script>
 
-<main class="h-screen w-full grid">
+<main class="h-screen w-full flex flex-col">
     <Navbar />
     <slot />
 </main>

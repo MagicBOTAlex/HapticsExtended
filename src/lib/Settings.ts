@@ -1,13 +1,29 @@
 import {invoke} from '@tauri-apps/api/core';
 import { Route } from './json/jsonTypes';
+import { writable, type Subscriber, type Unsubscriber } from 'svelte/store';
 
 // Loaded from the settingsjson
 export class Settings {
   public routes: Route[];
+  private store = writable<Settings>(this);
 
   constructor(routes: Route[] | undefined = undefined) {
     this.routes = routes ?? [];
   }
+
+  subscribe(run: Subscriber<Settings>): Unsubscriber {
+    return this.store.subscribe(run);
+  }
+
+  get Routes() {
+    return this.routes;
+  }
+
+  set Routes(rs: Route[]) {
+    this.routes = rs;
+    this.store.set(this);
+  }
+
 
   /**
    * Tries to load + validate your settings JSON.
@@ -58,5 +74,43 @@ export class Settings {
       console.error("One of the routes failed to parse", err);
       return null;
     }
+  }
+
+  public async save(): Promise<boolean> {
+    // Prepare the JSON with pretty printing
+    const payload = { routes: this.routes };
+    const content = JSON.stringify(payload, null, 2);
+
+    try {
+      await invoke<void>('write_file', {
+        path: './HapticExtendedSettings.json',
+        content
+      });
+      // update subscribers so UI stays in sync
+      this.store.set(this);
+      return true;
+    } catch (err) {
+      console.error('Could not write settings file', err);
+      return false;
+    }
+  }
+
+  public addRoute(){
+    this.routes.push(new Route());
+    this.store.set(this);
+  }
+
+  public removeRoute(route: Route): boolean {
+    console.log(route)
+    console.log(this.routes)
+    const idx = this.routes.findIndex(r => r.src === route.src);
+  
+    if (idx == -1) {
+      return false;
+    }
+  
+    this.routes.splice(idx, 1);
+    this.store.set(this);
+    return true;
   }
 }

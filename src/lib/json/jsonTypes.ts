@@ -1,7 +1,7 @@
 export class MappingFrom {
     constructor(
-      public upper: number,
-      public lower: number
+      public upper: number = 1,
+      public lower: number = 0
     ) {}
   
     static fromObject(obj: any): MappingFrom {
@@ -14,12 +14,12 @@ export class MappingFrom {
 
 export class MappingTo {
     constructor(
-      public upper: number,
-      public lower: number
+      public upper: number = 100,
+      public lower: number = 0
     ) {}
   
-    static fromObject(obj: any): MappingFrom {
-      return new MappingFrom(
+    static fromObject(obj: any): MappingTo {
+      return new MappingTo(
         Number(obj.upper),
         Number(obj.lower)
       );
@@ -28,8 +28,8 @@ export class MappingTo {
   
 export class Mapping {
     constructor(
-      public from: MappingFrom,
-      public to: MappingTo
+      public from: MappingFrom = new MappingFrom(),
+      public to: MappingTo = new MappingTo()
     ) {}
   
     static fromObject(obj: any): Mapping {
@@ -44,7 +44,7 @@ export class Route {
     constructor(
       public src?: string,
       public dest?: string,
-      public mapping?: Mapping
+      public mapping: Mapping = new Mapping()
     ) {}
   
     static fromObject(obj: any): Route {

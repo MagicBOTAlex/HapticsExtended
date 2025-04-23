@@ -53,6 +53,12 @@ fn read_file(path: String) -> Result<String, String> {
 }
 
 #[tauri::command]
+fn write_file(path: String, content: String) -> Result<(), String> {
+    // Return the Result directly; no need to clone
+    fs::write(&path, &content).map_err(|e| e.to_string())
+}
+
+#[tauri::command]
 fn startOscServer(app: AppHandle) -> Result<(), String> {
     tauri::async_runtime::spawn_blocking(move || {
         let socket = UdpSocket::bind("0.0.0.0:9001")
@@ -107,7 +113,8 @@ pub fn run() {
             greet,
             read_file,
             startOscServer,
-            sendToHapticInstance
+            sendToHapticInstance,
+            write_file
         ])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");

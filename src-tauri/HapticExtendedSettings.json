@@ -1,35 +1,35 @@
 {
-    "comment1": "Why tf does json not support comments",
-    "comment2": "TODO: Add merging multiple support",
-    "routes": [
-        {
-            "src": "/pat_left",
-            "dest": "http://192.168.50.44:82/LeftEar",
-            "mapping": {
-                "from": {
-                    "upper": 1,
-                    "lower": 0.5
-                },
-                "to": {
-                    "upper": 100,
-                    "lower": 0
-                }
-            }
-        },
-        {
-            "src": "/pat_right",
-            "dest": "http://192.168.50.44:82/RightEar",
-            "mapping": {
-                "from": {
-                    "upper": 1,
-                    "lower": 0.5
-                },
-                "to": {
-                    "upper": 100,
-                    "lower": 0
-                }
+  "comment1": "Why tf does json not support comments",
+  "comment2": "TODO: Add merging multiple support",
+  "routes": [
+      {
+          "src": "/pat_left",
+          "dest": "http://192.168.50.44:82/LeftEar",
+          "mapping": {
+              "from": {
+                  "upper": 1,
+                  "lower": 0.5
+              },
+              "to": {
+                  "upper": 100,
+                  "lower": 0
+              }
+          }
+      },
+      {
+          "src": "/pat_right",
+          "dest": "http://192.168.50.44:82/RightEar",
+          "mapping": {
+              "from": {
+                  "upper": 1,
+                  "lower": 0.5
+              },
+              "to": {
+                  "upper": 100,
+                  "lower": 0
+              }
 
-            }
-        }
-    ]
+          }
+      }
+  ]
 }

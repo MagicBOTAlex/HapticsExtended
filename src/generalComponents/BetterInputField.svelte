@@ -1,14 +1,51 @@
 <script lang="ts">
-    import { onMount } from "svelte";
+    import { createEventDispatcher, onMount } from "svelte";
 
-    export let placeholder = "";
+    export let value: string | number | undefined = undefined; // ① declare the prop
+    export let placeholder: string = "";
+
+    let inputField: HTMLInputElement;
+
+    const dispatch = createEventDispatcher();
+
+    // ② whenever the user types, update `value` and notify the parent
+    function handleInput(e: Event) {
+        const input = e.target as HTMLInputElement;
+        if (inputField.type == "text") {
+            value = input.value;
+        }
+        if (inputField.type == "number") {
+            value = parseFloat(input.value);
+        }
+        dispatch("input", input.value);
+    }
+
+    // ③ explicitly forward keydown
+    function handleKeydown(e: KeyboardEvent) {
+        dispatch("keydown", e);
+    }
+
+    onMount(()=>{
+        if (!value){
+            if (inputField.type == "text") {
+                value = "";
+            }
+            if (inputField.type == "number") {
+                value = 0;
+            }
+        }
+    });
 </script>
 
 <!-- svelte-ignore a11y_label_has_associated_control -->
 <div class="relative my-2 w-full">
     <input
         {...$$restProps}
+        bind:value
+        bind:this={inputField}
         placeholder=" "
+        on:input={handleInput}
+        on:keydown={handleKeydown}
         class="block w-full placeholder-transparent rounded px-2.5 pb-2.5 pt-5 text-sm
              text-base-content bg-gray-50 dark:bg-base-300 border-0 border-b-2
              border-gray-300 appearance-none
