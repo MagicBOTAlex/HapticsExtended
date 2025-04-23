@@ -7,7 +7,7 @@
     // })
 </script>
 
-<div class="h-full bg-grid-100 w-full">
+<div class="h-full bg-grid-100 w-full overflow-y-scroll">
     <div class="grid grid-cols-1 grid-flow-row p-4 gap-4 w-full">
         {#each HapticSettings.routes as route}
         <InstanceRoute bind:route={route}/>
