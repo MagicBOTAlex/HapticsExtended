@@ -14,7 +14,7 @@
         },
         {
             "src": "/pat_right",
-            "dest": "http://192.168.50.44:82/RighttEar",
+            "dest": "http://192.168.50.44:82/RightEar",
             "mapping": {
                 "from": {
                     "upper": 0.8,
