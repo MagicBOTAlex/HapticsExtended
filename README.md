@@ -9,3 +9,4 @@ This should work for both Windows and Linux. But Linux is untested.
 pnpm install
 pnpm tauri build
 ```
+The builded .exe should be in `.\HapticsExtended\src-tauri\target\debug`
