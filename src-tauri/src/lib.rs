@@ -65,7 +65,7 @@ fn handle_packet(app: &AppHandle, packet: OscPacket, source: String) {
             args
         };
 
-        app.emit_to("main", "rust-to-js", payload)
+        app.emit_to("main", "OnOscMessage", payload)
         .expect("Failed to send OSC payload.");
     }
 }
