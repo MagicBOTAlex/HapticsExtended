@@ -14,7 +14,9 @@ export class HapticManager {
         let oscPayload = OscPayload.fromRaw(rawPayload);
         let route = hapticSettings.routes.find(x => x.src == oscPayload.address);
         let mappedValue = this.map(oscPayload.args[0] as number, route!.mapping!.from.lower, route!.mapping!.from.upper, route!.mapping!.to.lower, route!.mapping!.to.upper); // Just gonna assume a float at 0 intex. idc anymore lol
-        console.log("Senting strength: " + mappedValue);
+        // console.log("Senting strength: " + mappedValue);
+
+        invoke("sendToHapticInstance", {dest:route!.dest!, strength:Math.floor(mappedValue) })
 
         // console.log("Received from \"" + oscPayload.address + "\"");
 
@@ -24,30 +26,30 @@ export class HapticManager {
         // console.log(oscPayload);
     }
 
-    public async sendToHapticInstance(strength: number = 100): Promise<any> {
-        const url = 'http://192.168.50.44:82/LeftEar';
-        const body = { strength };
+    public async sendToHapticInstance(destUrl: string, strength: number = 100): Promise<any> {
+        // // This is old, and the new way is done through rust
+        // const body = { strength };
 
-        try {
-            const response = await fetch(url, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(body)
-            });
+        // try {
+        //     const response = await fetch(destUrl, {
+        //         method: 'POST',
+        //         headers: {
+        //             'Content-Type': 'application/json'
+        //         },
+        //         body: JSON.stringify(body)
+        //     });
 
-            if (!response.ok) {
-                throw new Error(`Server responded with ${response.status}: ${response.statusText}`);
-            }
+        //     if (!response.ok) {
+        //         throw new Error(`Server responded with ${response.status}: ${response.statusText}`);
+        //     }
 
-            // assuming the server returns JSON
-            const data = await response.json();
-            return data;
-        } catch (error) {
-            console.error('Error sending request to LeftEar:', error);
-            throw error;
-        }
+        //     // assuming the server returns JSON
+        //     const data = await response.json();
+        //     return data;
+        // } catch (error) {
+        //     console.error('Error sending to haptic instance:', error);
+        //     throw error;
+        // }
     }
 
 

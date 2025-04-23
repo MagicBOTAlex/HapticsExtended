@@ -13,12 +13,12 @@
         {#each hapticSettings.routes as route}
             <InstanceRoute bind:route />
         {/each}
-        <!-- {#each HapticSettings.routes as route}
+        {#each hapticSettings.routes as route}
         <InstanceRoute bind:route={route}/>
         {/each}
-        {#each HapticSettings.routes as route}
+        {#each hapticSettings.routes as route}
         <InstanceRoute bind:route={route}/>
-        {/each} -->hapticSettings
+        {/each}
     </div>
     <div class="sticky z-10 bottom-0 right-0">
         <button class="btn btn-success btn-square m-4"><Plus /></button>

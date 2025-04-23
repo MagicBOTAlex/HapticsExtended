@@ -1,7 +1,9 @@
 #![allow(unused_variables)]
 #![allow(unused_imports)]
+#![allow(non_snake_case)]
 
 use std::{error::Error, fs, net::UdpSocket};
+use reqwest::Client;
 use rosc::{decoder, OscPacket};
 use serde::Serialize;
 use tauri::{AppHandle, Emitter};
@@ -11,6 +13,32 @@ use tauri::{AppHandle, Emitter};
 struct OscPayload {
     address: String,
     args: Vec<String>,
+}
+
+#[derive(Serialize)]
+struct HapticPayload{
+    strength: u8,
+}
+
+#[tauri::command]
+async fn sendToHapticInstance(dest: String, strength: u8) -> Result<(), String> {
+    let client = Client::new();
+    let payload = HapticPayload{strength};
+    let json_body = serde_json::to_string(&payload)
+        .map_err(|e| format!("Failed to serialize JSON: {}", e))?;
+
+    println!("Sending to {} with strength of: {}", dest, strength);
+
+    let response = client
+        .post(dest)
+        .header("Content-Type", "application/json")
+        .body(json_body)
+        .send()
+        .await
+        .map_err(|e| format!("Failed to serialize JSON: {}", e))?;
+
+    println!("Response status: {}", response.status());
+    Ok(())
 }
 
 #[tauri::command]
@@ -78,7 +106,8 @@ pub fn run() {
         .invoke_handler(tauri::generate_handler![
             greet,
             read_file,
-            startOscServer
+            startOscServer,
+            sendToHapticInstance
         ])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");
