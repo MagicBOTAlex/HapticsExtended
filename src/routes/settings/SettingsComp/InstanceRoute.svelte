@@ -30,7 +30,7 @@
                 </div>
             </div>
         </div>
-        <button class="p-2 cursor-pointer rounded bg-error flex justify-center items-center" on:click={async ()=> {
+        <button class="p-2 btn bg-error flex justify-center items-center" on:click={async ()=> {
             
         }}>
             <div>
