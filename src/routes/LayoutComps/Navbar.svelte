@@ -33,7 +33,7 @@
                 </div>
             </a>
             <div class="ml-auto p-2">
-                <a href="https://github.com/MagicBOTAlex/TauriLearning" target="_blank">
+                <a href="https://github.com/MagicBOTAlex/HapticsExtended" target="_blank">
                     <div class="w-6 h-6object-contain fill-base-content">
                         <GithubMark/>
                     </div>
