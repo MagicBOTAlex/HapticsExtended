@@ -6,6 +6,8 @@ declare global {
     }
 }
 
-export let HapticSettings = await Settings.tryLoadSettings();
-if (HapticSettings == null) HapticSettings = new Settings();
+let loadedSettings = await Settings.tryLoadSettings();
+if (loadedSettings == null) 
+    loadedSettings = new Settings();
+export let HapticSettings = loadedSettings;
 window.document.HapticSettings = HapticSettings;
