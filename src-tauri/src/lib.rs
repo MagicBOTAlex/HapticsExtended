@@ -17,26 +17,29 @@ fn read_file(path: String) -> Result<String, String> {
 
 #[tauri::command]
 fn startOscServer() -> Result<(), String> {
-    // 1) Fix the bind address (single colon) and unwrap with `?`
-    let socket = UdpSocket::bind("0.0.0.0:9001")
-        .map_err(|e| format!("Failed to bind UDP socket: {}", e))?;
+    tauri::async_runtime::spawn_blocking(|| {
+        let socket = UdpSocket::bind("0.0.0.0:9001")
+        .map_err(|e| format!("Failed to bind UDP socket: {}", e))
+        .ok()?;
 
-    println!("Listening for OSC on port 9001…");
+        println!("Listening for OSC on port 9001…");
 
-    // 2) Declare a 1024-byte buffer correctly
-    let mut buf = [0u8; 1024];
+        let mut buf = [0u8; 1024];
 
-    loop {
-        // 3) Unwrap the recv_from Result with `?`
-        let (size, addr) = socket
-            .recv_from(&mut buf)
-            .map_err(|e| format!("Receive error: {}", e))?;
+        loop {
+            let (size, addr) = socket
+                .recv_from(&mut buf)
+                .map_err(|e| format!("Receive error: {}", e))
+                .ok()?;
 
-        match decoder::decode(&buf[..size]) {
-            Ok(packet) => handle_packet(packet, addr.to_string()),
-            Err(err)  => eprintln!("Failed to decode OSC packet: {}", err),
+            match decoder::decode(&buf[..size]) {
+                Ok(packet) => handle_packet(packet, addr.to_string()),
+                Err(err)  => eprintln!("Failed to decode OSC packet: {}", err),
+            }
         }
-    }
+        Some(())
+    });
+    Ok(())
 }
 
 fn handle_packet(packet: OscPacket, source: String) {
