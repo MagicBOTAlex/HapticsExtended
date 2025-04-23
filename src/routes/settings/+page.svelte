@@ -1,11 +1,12 @@
-<script>
+<script lang="ts">
     import { HapticSettings } from "@src/lib/stores";
     import InstanceRoute from "./SettingsComp/InstanceRoute.svelte";
     import { Plus } from "lucide-svelte";
-    // import { onMount } from "svelte";
-    // onMount(async ()=>{
-    //     console.log(HapticSettings);
-    // })
+    import {invoke} from '@tauri-apps/api/core';
+
+    invoke<string>(
+        "startOscServer"
+      );
 </script>
 
 <div class="h-full bg-grid-100 w-full overflow-y-scroll relative">

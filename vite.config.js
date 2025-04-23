@@ -38,5 +38,5 @@ export default defineConfig(async () => ({
       "@images": path.resolve(__dirname, "./src/images"),
       "@src": path.resolve(__dirname, "./src"),
     },
-  },
+  }
 }));
