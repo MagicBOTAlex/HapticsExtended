@@ -7,9 +7,9 @@
     invoke<string>("startOscServer");
 
     import { listen } from "@tauri-apps/api/event";
-    import { OscPayload } from "@src/lib/types/OscPayload";
+    import { OscPayload, type RawOscPayload } from "@src/lib/types/OscPayload";
 
-    listen<OscPayload>("rust-to-js", (event) => {
+    listen<RawOscPayload>("rust-to-js", (event) => {
         let payload = OscPayload.fromRaw(event.payload);
         console.log("Received from \"" + payload.address + "\"");
         

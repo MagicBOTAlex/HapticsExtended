@@ -1,7 +1,7 @@
 // You would not belive how much vibed this is
 
 // 1. Raw payload type stays the same:
-type RawOscPayload = {
+export type RawOscPayload = {
     address: string
     args: string[]   // e.g. ["String(\"hello\")", "Float(22.0)", "Bool(true)"]
   }
