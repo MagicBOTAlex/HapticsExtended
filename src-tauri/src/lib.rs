@@ -3,6 +3,15 @@
 
 use std::{error::Error, fs, net::UdpSocket};
 use rosc::{decoder, OscPacket};
+use serde::Serialize;
+use tauri::{AppHandle, Emitter};
+
+#[derive(Serialize)]
+#[derive(Clone)]
+struct OscPayload {
+    address: String,
+    args: Vec<String>,
+}
 
 #[tauri::command]
 fn greet(name: &str) -> String {
@@ -16,8 +25,8 @@ fn read_file(path: String) -> Result<String, String> {
 }
 
 #[tauri::command]
-fn startOscServer() -> Result<(), String> {
-    tauri::async_runtime::spawn_blocking(|| {
+fn startOscServer(app: AppHandle) -> Result<(), String> {
+    tauri::async_runtime::spawn_blocking(move || {
         let socket = UdpSocket::bind("0.0.0.0:9001")
         .map_err(|e| format!("Failed to bind UDP socket: {}", e))
         .ok()?;
@@ -25,6 +34,7 @@ fn startOscServer() -> Result<(), String> {
         println!("Listening for OSC on port 9001…");
 
         let mut buf = [0u8; 1024];
+    
 
         loop {
             let (size, addr) = socket
@@ -33,7 +43,7 @@ fn startOscServer() -> Result<(), String> {
                 .ok()?;
 
             match decoder::decode(&buf[..size]) {
-                Ok(packet) => handle_packet(packet, addr.to_string()),
+                Ok(packet) => handle_packet(&app, packet, addr.to_string()),
                 Err(err)  => eprintln!("Failed to decode OSC packet: {}", err),
             }
         }
@@ -42,21 +52,24 @@ fn startOscServer() -> Result<(), String> {
     Ok(())
 }
 
-fn handle_packet(packet: OscPacket, source: String) {
-    match packet {
-        OscPacket::Message(msg) => {
-            println!("\n▶ From {}:", source);
-            println!("  Address: {}", msg.addr);
-            println!("  Arguments: {:?}", msg.args);
-        }
-        OscPacket::Bundle(bundle) => {
-            println!("\n▶ Bundle from {}: timetag={:?}", source, bundle.timetag);
-            for inner in bundle.content {
-                handle_packet(inner, source.clone());
-            }
-        }
+fn handle_packet(app: &AppHandle, packet: OscPacket, source: String) {
+    if let OscPacket::Message(msg) = packet {
+        let args = msg
+            .args
+            .iter()
+            .map(|arg| format!("{:?}", arg))
+            .collect::<Vec<String>>();
+
+        let payload = OscPayload {
+            address: msg.addr.clone(),
+            args
+        };
+
+        app.emit_to("main", "rust-to-js", payload)
+        .expect("Failed to send OSC payload.");
     }
 }
+
 
 #[cfg_attr(mobile, tauri::mobile_entry_point)]
 pub fn run() {

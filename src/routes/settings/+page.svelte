@@ -7,6 +7,13 @@
     invoke<string>(
         "startOscServer"
       );
+
+      import { listen } from '@tauri-apps/api/event';
+
+    listen('rust-to-js', event => {
+        console.log('Received from Rust:', event.payload);
+    });
+
 </script>
 
 <div class="h-full bg-grid-100 w-full overflow-y-scroll relative">
