@@ -5,10 +5,12 @@ import { writable, type Subscriber, type Unsubscriber } from 'svelte/store';
 // Loaded from the settingsjson
 export class Settings {
   public routes: Route[];
+  public port: number;
   private store = writable<Settings>(this);
 
-  constructor(routes: Route[] | undefined = undefined) {
+  constructor(routes: Route[] | undefined = undefined, port: number | undefined = undefined) {
     this.routes = routes ?? [];
+    this.port = port ?? 9001;
   }
 
   subscribe(run: Subscriber<Settings>): Unsubscriber {
@@ -53,23 +55,13 @@ export class Settings {
       console.error("Settings JSON is invalid", err);
       return null;
     }
-
-    // 3) Validate the shape
-    if (
-      !obj ||
-      typeof obj !== "object" ||
-      !Array.isArray(obj.routes)
-    ) {
-      console.error("Settings JSON does not have a routes array");
-      return null;
-    }
-
+    
     // 4) Map + validate each route however you like
     try {
       const routes = obj.routes.map((r: any) =>
         Route.fromObject(r)
       );
-      return new Settings(routes);
+      return new Settings(routes, obj.port);
     } catch (err) {
       console.error("One of the routes failed to parse", err);
       return null;
@@ -78,7 +70,7 @@ export class Settings {
 
   public async save(): Promise<boolean> {
     // Prepare the JSON with pretty printing
-    const payload = { routes: this.routes };
+    const payload = { routes: this.routes, port: this.port };
     const content = JSON.stringify(payload, null, 2);
 
     try {

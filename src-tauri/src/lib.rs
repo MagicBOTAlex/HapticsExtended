@@ -59,13 +59,13 @@ fn write_file(path: String, content: String) -> Result<(), String> {
 }
 
 #[tauri::command]
-fn startOscServer(app: AppHandle) -> Result<(), String> {
+fn startOscServer(app: AppHandle, serverPort: u8) -> Result<(), String> {
     tauri::async_runtime::spawn_blocking(move || {
-        let socket = UdpSocket::bind("0.0.0.0:9001")
+        let socket = UdpSocket::bind(format!("0.0.0.0:{}", serverPort))
         .map_err(|e| format!("Failed to bind UDP socket: {}", e))
         .ok()?;
 
-        println!("Listening for OSC on port 9001…");
+        println!("Listening for OSC on port {}", serverPort);
 
         let mut buf = [0u8; 1024];
     

@@ -56,11 +56,12 @@ export class HapticManager {
     public async start(port: number = -1) {
         this.isRunning = true;
 
-        if (port >= 0) {
-            console.warn("Setting port is still not implimented");
+        if (port < 0) {
+            port = hapticSettings.port;
+            console.log(port);
         }
 
-        invoke<string>("startOscServer");
+        invoke<string>("startOscServer", {serverPort: port});
         listen<RawOscPayload>("OnOscMessage", async (event) => { await this.handleOscMessage(event.payload) });
     }
 
